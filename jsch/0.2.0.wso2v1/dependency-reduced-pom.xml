@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.wso2.orbit.com.jcraft</groupId>
+  <artifactId>jsch</artifactId>
+  <packaging>bundle</packaging>
+  <name>JSch</name>
+  <version>0.1.55.wso2v1</version>
+  <description>A pure Java implementation of SSH2</description>
+  <url>http://wso2.org</url>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.2.2</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <minimizeJar>false</minimizeJar>
+          <artifactSet>
+            <includes>
+              <include>org.bouncycastle:bcprov-jdk15on</include>
+            </includes>
+          </artifactSet>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <version>${maven.bundle.plugin.version}</version>
+        <extensions>true</extensions>
+        <configuration>
+          <instructions>
+            <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+            <Bundle-Name>${project.artifactId}</Bundle-Name>
+            <Export-Package>com.jcraft.jsch.*;version="${jsch.wso2.version}"</Export-Package>
+            <Import-Package>!com.jcraft.jsch.*,
+                            com.jcraft.jzlib;resolution:=optional,
+                            javax.crypto;resolution:=optional,
+                            javax.crypto.interfaces;resolution:=optional,
+                            javax.crypto.spec;resolution:=optional,
+                            org.ietf.jgss;resolution:=optional</Import-Package>
+            <Embed-Dependency>*;groupId=com.github.mwiede;scope=compile; type=!pom; inline=!META-INF/**</Embed-Dependency>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencies>
+    <dependency>
+      <groupId>com.github.mwiede</groupId>
+      <artifactId>jsch</artifactId>
+      <version>0.2.0</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
+  <distributionManagement>
+    <repository>
+      <id>wso2.releases</id>
+      <name>WSO2 internal Repository</name>
+      <url>https://maven.wso2.org/nexus/content/repositories/releases/</url>
+    </repository>
+  </distributionManagement>
+  <properties>
+    <jsch.version>0.2.0</jsch.version>
+    <maven.bundle.plugin.version>2.4.0</maven.bundle.plugin.version>
+    <bouncycastle.version>1.70</bouncycastle.version>
+    <jsch.wso2.version>0.1.55.wso2v1</jsch.wso2.version>
+    <maven.shade.plugin.version>3.2.4</maven.shade.plugin.version>
+  </properties>
+</project>
